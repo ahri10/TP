@@ -39,3 +39,6 @@ mismoselementos xs ys
                 | pertenece (head xs) ys && tail xs == [] = True
                 | pertenece (head xs) ys == False && tail xs == [] = False
                 | otherwise = (mismoselementos (tail xs) ys) && (pertenece (head xs) ys)
+
+usuarioValido :: Usuario -> Bool
+usuarioValido u = idDeUsuario u > 0 && (length (nombreDeUsuario u)) > 0

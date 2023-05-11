@@ -44,6 +44,64 @@ proyectarNombresAux (x:xs) = nombreDeUsuario x : proyectarNombres xs
 
 -- Predicados 
 
+sinRepetidos :: Eq t => [t] -> [t]
+sinRepetidos [] = []
+sinRepetidos (x : xs) = if pertenece x xs
+                        then sinRepetidos xs
+                        else x : sinRepetidos xs
+                        else hayRepetidos xs
+
+
+hayRepetidos :: Eq t => [t] -> Bool
+hayRepetidos [] = False
+hayRepetidos (x : xs) = if pertenece x xs
+                        then True
+
+noHayRelacionesRepetidas :: [Relacion] -> Bool
+noHayRelacionesRepetidas [] = True
+noHayRelacionesRepetidas (x : xs) = if perteneceRelacion x xs
+                                    then False
+                                    else noHayRelacionesRepetidas xs 
+
+perteneceRelacion :: Relacion -> [Relacion] -> Bool
+perteneceRelacion _ [] = False
+perteneceRelacion rs (x : xs) = relacionesIguales rs x || perteneceRelacion rs xs
+
+usuariosIguales :: Usuario -> Usuario -> Bool
+usuariosIguales us1 us2 = idDeUsuario us1 == idDeUsuario us2 && nombreDeUsuario us1 == nombreDeUsuario us2
+
+
+relacionesIguales :: Relacion -> Relacion -> Bool
+relacionesIguales (us1,us2) (us3,us4) = usuariosIguales us1 us3 && usuariosIguales us2 us4
+
+
+relacionesValidas :: [Usuario] -> [Relacion] -> Bool
+relacionesValidas us rs = relacionesAsimetricas rs && noHayRelacionesRepetidas rs && usuariosDeRelacionValidos us rs
+
+
+relacionesAsimetricas :: [Relacion] -> Bool
+relacionesAsimetricas [] = True
+relacionesAsimetricas (x : xs)  | perteneceRelacion (reverseRelacion x) xs = False 
+                                | otherwise = relacionesAsimetricas xs  
+
+
+reverseRelacion :: Relacion -> Relacion
+reverseRelacion (us1,us2) = (us2,us1)
+
+perteneceUsuario :: Usuario -> [Usuario] -> Bool
+perteneceUsuario _ [] = False
+perteneceUsuario us (x: xs) = usuariosIguales us x || perteneceUsuario us xs
+
+usuariosDeRelacionValidos :: [Usuario] -> [Relacion] -> Bool
+usuariosDeRelacionValidos us (x : xs) = perteneceUsuario (fst x) us &&
+                                        perteneceUsuario (snd x) us && 
+                                        relacionValida x &&
+                                        usuariosDeRelacionValidos us xs
+
+relacionValida :: Relacion -> Bool
+relacionValida (us1,us2) | usuariosIguales us1 us2 = False
+                         | otherwise = True
+
 -- Indica si un valor de entrada es un elemento en una lista determinada.
 pertenece :: Eq t => t -> [t] -> Bool
 pertenece _ [] = False
@@ -106,3 +164,4 @@ listaDeLikes (x:xs) = likesDePublicacion x : listaDeLikes xs
 listaDeUsuariosPubs :: [Publicacion] -> [Usuario]
 listaDeUsuariosPubs [] = []
 listaDeUsuariosPubs (x:xs) = usuarioDePublicacion x : listaDeUsuariosPubs xs
+

@@ -80,6 +80,14 @@ publicacionesDeAux (x:xs) us | usuarioDePublicacion x == us = x : publicacionesD
                              | otherwise = publicacionesDeAux xs us
 --La funcion auxiliar crea la lista de publicaciones del usuario y publicacionesDe saca los repetidos
 
+-- Ejercicio 7
+publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
+publicacionesQueLeGustanA red us = sacarRepetidos (publicacionesQueLeGustanAAux (publicaciones red) us)
+
+publicacionesQueLeGustanAAux :: [Publicacion] -> Usuario
+publicacionesQueLeGustanAAux [] _ = []
+publicacionesQueLeGustanAAux xs us | pertenece us (likesDePublicacion xs) : publicacionesQueLeGustanAAux
+				                           | otherwise = publicacionesQueLeGustanAAux xs us
 -- Predicados
 
 -- Determina la longitud de una lista.

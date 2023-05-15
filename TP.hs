@@ -242,3 +242,18 @@ relacionesValidas [] _ = False
 relacionesValidas _ [] = False 
 relacionesValidas us rs = relacionesAsimetricas rs && sinRepetidos rs && usuariosDeRelacionValidos us rs
 
+
+-- Ejercicio 9 (NO COMPLETO)
+tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
+tieneUnSeguidorFiel red us = tieneUnSeguidorFielAux (usuarios red) us
+
+{-tieneUnSeguidorFielAux :: RedSocial -> [Usuario] -> Usuario -> Bool
+tieneUnSeguidorFielAux red (x:xs) us = (pertenece (x (likesDePublicacion (head (publicacionesDe red us)))))-}
+
+tieneUnSeguidorFielAux :: RedSocial -> [Usuario] -> Bool
+tieneUnSeguidorFielAux red (x:xs) | esFiel red x = True
+                                  | xs /= [] = tieneUnSeguidorFielAux 
+                                  | otherwise = False
+esFiel :: RedSocial -> Usuario -> Bool
+esFiel red us | longitud publicacionesDe red us == 0 = False
+              | otherwise = (pertenece (us (likesDePublicacion (head (publicacionesDe red us)))))

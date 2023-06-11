@@ -15,6 +15,7 @@ testNombresDeUsuarios = [
 -- Ejercicio 2
 testAmigosDe = [
     " devuelve todos los amigos del usuario" ~: mismoselementos (amigosDe red1 usuario1) [usuario3, usuario4, usuario2] ~?= True,
+    " devuelve [] si no hay relaciones" ~: amigosDe redCasiVacia usuario1 ~?= [],
     " un usuario sin amigos devuelve []" ~: amigosDe red2 usuario4 ~?= []]
 
 -- Ejercicio 3
@@ -25,7 +26,8 @@ testCantidadDeAmigos = [
 --Ejercicio 4
 testUsuarioConMasAmigos = [
     " devuelve el usuario con mas amigos" ~: usuarioConMasAmigos red1 ~?= usuario1 ,
-    " devuelve el ultimo usuario con la mayor cantidad de amigos si hay mas de uno" ~: expectAny (usuarioConMasAmigos red2) [usuario3, usuario2]]
+    " devuelve el ultimo usuario con la mayor cantidad de amigos si hay mas de uno" ~: expectAny (usuarioConMasAmigos red2) [usuario3, usuario2],
+    " devuelve cualquier usuario si no hay relaciones" ~: expectAny (usuarioConMasAmigos redCasiVacia) usuarios1]
 
 -- Ejercicio 5
 testEstaRobertoCarlos = [
@@ -41,7 +43,8 @@ testPublicacionesDe = [
 -- Ejercicio 7
 testPublicacionesQueLeGustanA = [
     " devuelve todas las publicaciones que le gustan al usuario" ~: mismoselementos (publicacionesQueLeGustanA red1 usuario4) [publicacion1_us2, publicacion1_us1] ~?= True,
-    " devuelve vacio si no le gusta ninguna publicacion" ~: publicacionesQueLeGustanA red1 usuario2 ~?= []]
+    " devuelve vacio si no le gusta ninguna publicacion" ~: publicacionesQueLeGustanA red1 usuario2 ~?= [],
+    " devuelve vacio si no hay publicaciones" ~: publicacionesQueLeGustanA redCasiVacia usuario1 ~?= []]
 
 --Ejercicio 8
 testLesGustanLasMismasPublicaciones = [
@@ -181,4 +184,5 @@ relacionesRC2 = [relacionRC1, relacionRC2, relacionRC3, relacionRC4, relacionRC5
 -- Red para Roberto Carlos
 redRC = (usuariosRC, relacionesRC, [])
 redRC2 = (usuariosRC, relacionesRC2, [])
+
 

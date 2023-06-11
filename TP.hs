@@ -131,6 +131,42 @@ esFiel red us seguidor = incluido (publicacionesDe red us) (publicacionesQueLeGu
 
 -- Ejercicio 10
 
+--sonAmigosMOD hace exactamente lo mismo que sonAmigos pero con las relaciones directamente
+sonAmigosMOD :: Relacion -> [Relacion] -> Bool
+sonAmigosMOD (u1, u2) rel = pertenece (u1,u2) rel || pertenece (u2,u1) rel
+
+-- quita relaciones de un usuario de una lista de relaciones
+quitarRelacionesDe :: [Relacion] -> Usuario -> [Relacion]
+quitarRelacionesDe [] _ = []
+quitarRelacionesDe ((r1,r2):xs) u1 | r1 == u1 || r2 == u1 = quitarRelacionesDe xs u1
+                                   | otherwise = (r1,r2) : quitarRelacionesDe xs u1
+
+
+existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
+existeSecuenciaDeAmigos red u1 u2 | sonAmigos (u1,u2) red = True
+                                  | amigosDe red u2 == [] = False
+                                  | otherwise = verificador rel (amigosDe red u1) u2
+                                  where rel = relaciones red
+
+
+verificador :: [Relacion] -> [Usuario] -> Usuario -> Bool
+verificador  _ []  _ = False
+verificador [] _  _ = False
+verificador rel (x:xs) u2 | sonAmigosMOD (x,u2) rel = True
+                          | otherwise =  verificador rel xs u2 || verificador relsFiltradas amigosDeX u2
+                          where relsFiltradas = quitarRelacionesDe rel x
+                                amigosDeX = amigosDeAux rel x
+{- 
+   Verificador empieza con (x:xs) siendo los amigos de u1
+   
+   despues revisa si x es amigo de u2. Si son retorna True.
+   
+   Si es False hace dos recursiones, por un lado hace una recursion para
+   probar todos los demas amigos del usuario.
+   
+   Por el otro hace una recursion reemplazando (x:xs) por los amigos de x
+   y filtrando las relaciones sacando las de x.
+ -}
 
 -- Funciones auxiliares
 
